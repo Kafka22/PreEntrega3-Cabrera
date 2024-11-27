@@ -1,6 +1,4 @@
-
-// 1. Capturamos la elección del usuario (escala, acorde o progresión)
-// 1. Capturamos la elección del usuario (escala, acorde o progresión)
+// Capturamos la elección del usuario (escala, acorde o progresión) e Inicio el sistema
 let opcionUsuario = parseInt(prompt("¿Qué te gustaría consultar?\n1. Escala basada en la progresión de Do mayor\n2. Acordes relacionados con la progresión de Do mayor\n3. Progresión armónica (grados I, IV, V) en Do mayor"));
 
 
@@ -19,10 +17,10 @@ if (opcionUsuario < 1 || opcionUsuario > 3) {
     } else {
         // Función de orden superior para aplicar intervalos
         function aplicarIntervalo(nota, intervalo) {
-            return (nota + intervalo) % 7; //lo aprendí de la IA, y se refiere a cómo manejar las notas musicales en un ciclo, ya que en la música occidental las notas se repiten en octavas. Aunque una nota Do de una octava diferente vibra en una frecuencia distinta a la de la primera octava, seguimos llamándola "Do" porque mantiene su nombre en cada ciclo. Si lo hubiera hecho de manera más matemática, habría tenido que definir cada Do como una nota completamente distinta en cada octava, creando múltiples versiones de la misma nota. Sin embargo, en la nomenclatura musical, no nos importa tanto la frecuencia exacta para los cálculos teóricos; lo que importa es que las notas se ven como un ciclo repetitivo. Usando esta fórmula modular % 7, logramos que la suma de las notas vuelva al principio cuando alcanzamos el final de la escala, repitiendo así la misma nota (como "Do") después de completar el ciclo de las siete notas (Do, Re, Mi, Fa, Sol, La, Si). Esto simplifica mucho el manejo de las notas en programación, reflejando cómo las notas se comportan en las escalas musicales.
+            return (nota + intervalo) % 7; //lo aprendí de la IA, y se refiere a cómo manejar las notas musicales en un ciclo, ya que en la música occidental las notas se repiten en octavas. Aunque una nota Do de una octava diferente vibra en una frecuencia distinta a la de la primera octava, seguimos llamándola "Do" porque mantiene su nombre en cada ciclo. Si lo hubiera hecho de la manera matemáticama mas simple que manejo, yo hubiera tenido que definir cada Do como una nota completamente distinta en cada octava, creando múltiples versiones de la misma nota. Para este caso no hubiesen sido infinitas, pero me hubiese vuelto loco haciendo varias, lo mismo que me paso en la anterior version de este proyecto, en la primer entrega, tuve que hacer dos octavas para todas las notas asi se podrian resolver las distancias entre intervalos. Sin embargo, en la nomenclatura musical, no nos importa tanto la frecuencia exacta para los cálculos teóricos; lo que importa es que las notas se ven como un ciclo repetitivo. Usando esta fórmula modular % 7, que repito me ayudo la IA despues de horas de tratar de hacerle entender lo que queria lograr. Hice que la suma de las notas vuelva al principio cuando alcanzamos el final de la escala, repitiendo así la misma nota (como "Do") después de completar el ciclo de las siete notas (Do, Re, Mi, Fa, Sol, La, Si). 
         }
 
-        // 3. Clase para acordes
+        //Clase para acordes
         class Acorde {
             constructor(tonica) {
                 this.tonica = tonica;
@@ -51,7 +49,7 @@ if (opcionUsuario < 1 || opcionUsuario > 3) {
             return [acordeI, acordeIV, acordeV];
         }
 
-        // 4. Dependiendo de lo que el usuario elija, mostramos la información correspondiente
+        //Dependiendo de lo que el usuario elija, mostramos la información correspondiente
         switch (opcionUsuario) {
             case 1: // Mostrar Escala
                 let escala = construirEscala(notaBase);
