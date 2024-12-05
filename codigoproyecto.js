@@ -1,74 +1,89 @@
-// Capturamos la elección del usuario (escala, acorde o progresión) e Inicio el sistema
-let opcionUsuario = parseInt(prompt("¿Qué te gustaría consultar?\n1. Escala basada en la progresión de Do mayor\n2. Acordes relacionados con la progresión de Do mayor\n3. Progresión armónica (grados I, IV, V) en Do mayor"));
+// Datos de escalas, acordes y progresiones
+const escalasMayores = {
+    Do: ["Do", "Re", "Mi", "Fa", "Sol", "La", "Si"],
+    Re: ["Re", "Mi", "Fa#", "Sol", "La", "Si", "Do#"],
+    Mi: ["Mi", "Fa#", "Sol#", "La", "Si", "Do#", "Re#"],
+    Fa: ["Fa", "Sol", "La", "Si♭", "Do", "Re", "Mi"],
+    Sol: ["Sol", "La", "Si", "Do", "Re", "Mi", "Fa#"],
+    La: ["La", "Si", "Do#", "Re", "Mi", "Fa#", "Sol#"],
+    Si: ["Si", "Do#", "Re#", "Mi", "Fa#", "Sol#", "La#"]
+};
 
+const acordesMayores = {
+    Do: { nombre: "Do maj7", arpegio: ["Do", "Mi", "Sol", "Si"] },
+    Re: { nombre: "Re m7", arpegio: ["Re", "Fa", "La", "Do"] },
+    Mi: { nombre: "Mi m7", arpegio: ["Mi", "Sol", "Si", "Re"] },
+    Fa: { nombre: "Fa maj7", arpegio: ["Fa", "La", "Do", "Mi"] },
+    Sol: { nombre: "Sol 7", arpegio: ["Sol", "Si", "Re", "Fa"] },
+    La: { nombre: "La m7", arpegio: ["La", "Do", "Mi", "Sol"] },
+    Si: { nombre: "Si ø", arpegio: ["Si", "Re", "Fa", "La"] }
+};
 
-if (opcionUsuario < 1 || opcionUsuario > 3) {
-    alert("Por favor, ingresa una opción válida (1, 2 o 3).");
-} else {
+const progresionesMayores = {
+    Do: ["Do maj7", "Re m7", "Mi m7", "Fa maj7", "Sol 7", "La m7", "Si ø"],
+    Re: ["Re maj7", "Mi m7", "Fa#m7", "Sol maj7", "La 7", "Si m7", "Do# ø"],
+    Mi: ["Mi maj7", "Fa#m7", "Sol#m7", "La maj7", "Si 7", "Do#m7", "Re# ø"],
+    Fa: ["Fa maj7", "Sol m7", "La m7", "Si♭ maj7", "Do 7", "Re m7", "Mi ø"],
+    Sol: ["Sol maj7", "La m7", "Si m7", "Do maj7", "Re 7", "Mi m7", "Fa# ø"],
+    La: ["La maj7", "Si m7", "Do#m7", "Re maj7", "Mi 7", "Fa#m7", "Sol# ø"],
+    Si: ["Si maj7", "Do#m7", "Re#m7", "Mi maj7", "Fa# 7", "Sol#m7", "La# ø"]
+};
 
-    // 2. Definir las notas de la escala
-    const escalaDo = ["Do", "Re", "Mi", "Fa", "Sol", "La", "Si"];
-    
-    // Capturar la nota base del usuario
-    let notaBase = parseInt(prompt("Elige la nota base:\n0. Do\n1. Re\n2. Mi\n3. Fa\n4. Sol\n5. La\n6. Si"));
+// Elementos del DOM
+const notasDiv = document.getElementById("notas");
+const resultadoDiv = document.getElementById("resultado");
 
-    if (notaBase < 0 || notaBase > 6) {
-        alert("Por favor, ingresa un número válido entre 0 y 6.");
-    } else {
-        // Función de orden superior para aplicar intervalos
-        function aplicarIntervalo(nota, intervalo) {
-            return (nota + intervalo) % 7; //lo aprendí de la IA, y se refiere a cómo manejar las notas musicales en un ciclo, ya que en la música occidental las notas se repiten en octavas. Aunque una nota Do de una octava diferente vibra en una frecuencia distinta a la de la primera octava, seguimos llamándola "Do" porque mantiene su nombre en cada ciclo. Si lo hubiera hecho de la manera matemáticama mas simple que manejo, yo hubiera tenido que definir cada Do como una nota completamente distinta en cada octava, creando múltiples versiones de la misma nota. Para este caso no hubiesen sido infinitas, pero me hubiese vuelto loco haciendo varias, lo mismo que me paso en la anterior version de este proyecto, en la primer entrega, tuve que hacer dos octavas para todas las notas asi se podrian resolver las distancias entre intervalos. Sin embargo, en la nomenclatura musical, no nos importa tanto la frecuencia exacta para los cálculos teóricos; lo que importa es que las notas se ven como un ciclo repetitivo. Usando esta fórmula modular % 7, que repito me ayudo la IA despues de horas de tratar de hacerle entender lo que queria lograr. Hice que la suma de las notas vuelva al principio cuando alcanzamos el final de la escala, repitiendo así la misma nota (como "Do") después de completar el ciclo de las siete notas (Do, Re, Mi, Fa, Sol, La, Si). 
-        }
+// Al cargar la página, recupero la última selección guardada
+document.addEventListener("DOMContentLoaded", () => {
+    const ultimaOpcion = localStorage.getItem("ultimaOpcion");
+    const ultimaNota = localStorage.getItem("ultimaNota");
 
-        //Clase para acordes
-        class Acorde {
-            constructor(tonica) {
-                this.tonica = tonica;
-                this.tercera = aplicarIntervalo(tonica, 2); // Tercera mayor
-                this.quinta = aplicarIntervalo(tonica, 4);  // Quinta justa
-            }
+    if (ultimaOpcion && ultimaNota) {
+        mostrarResultado(ultimaNota, ultimaOpcion);
+    }
+});
 
-            // Método para mostrar las notas del acorde
-            mostrarAcorde() {
-                return `Acorde: ${escalaDo[this.tonica]}, ${escalaDo[this.tercera]}, ${escalaDo[this.quinta]}`;
-            }
-        }
+document.getElementById("botonEscalas").addEventListener("click", () => {
+    mostrarNotas("escala");
+});
 
-        // Función para construir la escala
-        function construirEscala(tonica) {
-            let inicio = escalaDo.slice(tonica);
-            let final = escalaDo.slice(0, tonica);
-            return inicio.concat(final); // Unir ambas partes
-        }
+document.getElementById("botonAcordes").addEventListener("click", () => {
+    mostrarNotas("acorde");
+});
 
-        // Función para construir una progresión armónica I-IV-V
-        function construirProgresion(tonica) {
-            let acordeI = new Acorde(tonica);
-            let acordeIV = new Acorde(aplicarIntervalo(tonica, 3));
-            let acordeV = new Acorde(aplicarIntervalo(tonica, 4));
-            return [acordeI, acordeIV, acordeV];
-        }
+document.getElementById("botonProgresiones").addEventListener("click", () => {
+    mostrarNotas("progresion");
+});
 
-        //Dependiendo de lo que el usuario elija, mostramos la información correspondiente
-        switch (opcionUsuario) {
-            case 1: // Mostrar Escala
-                let escala = construirEscala(notaBase);
-                alert(`La escala de ${escalaDo[notaBase]} es: ${escala.join(", ")}`);
-                break;
+// Función para mostrar las notas
+function mostrarNotas(opcion) {
+    notasDiv.innerHTML = "";
 
-            case 2: // Mostrar Acorde
-                let acorde = new Acorde(notaBase);
-                alert(acorde.mostrarAcorde());
-                break;
+    Object.keys(escalasMayores).forEach(nota => {
+        const botonNota = document.createElement("button");
+        botonNota.textContent = nota;
+        botonNota.addEventListener("click", () => {
+            mostrarResultado(nota, opcion);
 
-            case 3: // Mostrar Progresión armónica
-                let progresion = construirProgresion(notaBase);
-                let progresionTexto = progresion.map(acorde => acorde.mostrarAcorde()).join("\n");
-                alert(`Progresión armónica I-IV-V de ${escalaDo[notaBase]}:\n${progresionTexto}`);
-                break;
+            localStorage.setItem("ultimaOpcion", opcion);
+            localStorage.setItem("ultimaNota", nota);
+        });
+        notasDiv.appendChild(botonNota);
+    });
+}
 
-            default:
-                alert("Opción no válida.");
-        }
+// Función para mostrar el resultado según la opción elegida y la nota seleccionada
+function mostrarResultado(nota, opcion) {
+    resultadoDiv.innerHTML = ""; // Limpiar el resultado anterior
+
+    if (opcion === "escala") {
+        const escala = escalasMayores[nota];
+        resultadoDiv.innerHTML = `<h3>Escala Mayor de ${nota}</h3><p>${escala.join(", ")}</p>`;
+    } else if (opcion === "acorde") {
+        const acorde = acordesMayores[nota];
+        resultadoDiv.innerHTML = `<h3>Acorde de ${acorde.nombre}</h3><p>Arpegio: ${acorde.arpegio.join(", ")}</p>`;
+    } else if (opcion === "progresion") {
+        const progresion = progresionesMayores[nota];
+        resultadoDiv.innerHTML = `<h3>Progresión Armónica de ${nota} Mayor</h3><p>${progresion.join(", ")}</p>`;
     }
 }
