@@ -1,0 +1,29 @@
+{
+    "escalas": {
+        "Do": ["Do", "Re", "Mi", "Fa", "Sol", "La", "Si"],
+        "Re": ["Re", "Mi", "Fa#", "Sol", "La", "Si", "Do#"],
+        "Mi": ["Mi", "Fa#", "Sol#", "La", "Si", "Do#", "Re#"],
+        "Fa": ["Fa", "Sol", "La", "Sib", "Do", "Re", "Mi"],
+        "Sol": ["Sol", "La", "Si", "Do", "Re", "Mi", "Fa#"],
+        "La": ["La", "Si", "Do#", "Re", "Mi", "Fa#", "Sol#"],
+        "Si": ["Si", "Do#", "Re#", "Mi", "Fa#", "Sol#", "La#"]
+    },
+    "acordes": {
+        "Do": "I: Do maj7 (Arpegio: Do, Mi, Sol, Si)",
+        "Re": "II: Re m7 (Arpegio: Re, Fa, La, Do)",
+        "Mi": "III: Mi m7 (Arpegio: Mi, Sol, Si, Re)",
+        "Fa": "IV: Fa maj7 (Arpegio: Fa, La, Do, Mi)",
+        "Sol": "V: Sol 7 (Arpegio: Sol, Si, Re, Fa)",
+        "La": "VI: La m7 (Arpegio: La, Do, Mi, Sol)",
+        "Si": "VII: Si Ø7 (Arpegio: Si, Re, Fa, La)"
+    },
+    "progresiones": {
+        "Do": ["Do maj7", "Re m7", "Mi m7", "Fa maj7", "Sol 7", "La m7", "Si Ø7"],
+        "Re": ["Re maj7", "Mi m7", "Fa# m7", "Sol maj7", "La 7", "Si m7", "Do# Ø7"],
+        "Mi": ["Mi maj7", "Fa# m7", "Sol# m7", "La maj7", "Si 7", "Do# m7", "Re# Ø7"],
+        "Fa": ["Fa maj7", "Sol m7", "La m7", "Sib maj7", "Do 7", "Re m7", "Mi Ø7"],
+        "Sol": ["Sol maj7", "La m7", "Si m7", "Do maj7", "Re 7", "Mi m7", "Fa# Ø7"],
+        "La": ["La maj7", "Si m7", "Do# m7", "Re maj7", "Mi 7", "Fa# m7", "Sol# Ø7"],
+        "Si": ["Si maj7", "Do# m7", "Re# m7", "Mi maj7", "Fa# 7", "Sol# m7", "La# Ø7"]
+    }
+}
